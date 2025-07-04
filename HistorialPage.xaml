@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cal="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
+             x:Class="Rutinas.HistorialPage"
+             Title="HistorialPage"
+             BackgroundColor="White" >
+
+    <ScrollView>
+    <VerticalStackLayout Padding="10">
+        <Button Text="Volver"
+                FontSize="18"
+                BackgroundColor="LightBlue" 
+                TextColor="Black"
+                Clicked="OnVolverClicked"/>
+
+        <cal:Calendar Events="{Binding EventCollection}"
+                      EventIndicatorColor="Green"  
+                      SelectedDayBackgroundColor="LightBlue" 
+                      EventIndicatorSelectedColor="Green" 
+                      TodayOutlineColor="Blue"
+                      EventsScrollViewVisible="True">
+            <cal:Calendar.EventTemplate>
+                <DataTemplate>
+                    <Frame Margin="10" Padding="10" BackgroundColor="#f0f0f0" BorderColor="LightGray" CornerRadius="10">
+                        <VerticalStackLayout Spacing="10">
+                         
+                            <!-- Título de la rutina -->
+                            <Label Text="{Binding TipoRutina}"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           TextColor="Black"/>
+
+                            <!-- Tabla de ejercicios -->
+                            <CollectionView ItemsSource="{Binding Ejercicios}">
+                                <CollectionView.Header>
+                                    <Grid ColumnDefinitions="2.5*, Auto, *, *"
+                                  Padding="0,0,0,10"
+                                  BackgroundColor="#eeeeee">
+                                        <Label Text="Ejercicio"
+                                       FontAttributes="Bold"
+                                       Grid.Column="0"
+                                       TextColor="Black"/>
+                                        <Label Text="Serie"
+                                       FontAttributes="Bold"
+                                       Grid.Column="1"
+                                       HorizontalOptions="Center"
+                                       TextColor="Black"/>
+                                        <Label Text="Reps"
+                                       FontAttributes="Bold"
+                                       Grid.Column="2"
+                                       HorizontalOptions="Center"
+                                       TextColor="Black"/>
+                                        <Label Text="Peso"
+                                       FontAttributes="Bold"
+                                       Grid.Column="3"
+                                       HorizontalOptions="Center"
+                                       TextColor="Black"/>
+                                    </Grid>
+                                </CollectionView.Header>
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="2.5*, Auto, *, *"
+                                      ColumnSpacing="10"
+                                      Padding="5,2">
+
+                                            <Label Text="{Binding NombreEjercicio}"
+                                           Grid.Column="0"
+                                           TextColor="Black"/>
+                                            <Label Text="{Binding Serie, StringFormat='{}{0} °'}"
+                                           Grid.Column="1"
+                                           HorizontalOptions="Center"
+                                           TextColor="Black"/>
+                                            <Label Text="{Binding Repeticiones}"
+                                           Grid.Column="2"
+                                           HorizontalOptions="Center"
+                                           TextColor="Black"/>
+                                            <Label Text="{Binding Peso, StringFormat='{}{0} kg'}"
+                                           Grid.Column="3"
+                                           HorizontalOptions="Center"
+                                           TextColor="Black"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </cal:Calendar.EventTemplate>
+        </cal:Calendar>
+    </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
