@@ -42,4 +42,9 @@ public class RutinaDatabase
                         .Where(e => e.RutinaId == rutinaId)
                         .ToListAsync();
     }
+
+    public async Task ExecuteAsync(string query)
+    {
+        await _database.ExecuteAsync(query);
+    }
 }

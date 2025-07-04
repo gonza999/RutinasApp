@@ -56,6 +56,32 @@
         {
             await Navigation.PushAsync(new EntrenarPage());
         }
+
+        private async void OnBorrarDbClicked(object sender, EventArgs e)
+        {
+            bool confirmado = await DisplayAlert("Confirmar",
+                "¿Estás seguro de que querés borrar todos los datos de la base?",
+                "Sí, borrar",
+                "Cancelar");
+
+            if (confirmado)
+            {
+                try
+                {
+                    // Ejecutar los DELETE
+                    await App.Database.ExecuteAsync("DELETE FROM Rutina");
+                    await App.Database.ExecuteAsync("DELETE FROM sqlite_sequence");
+                    await App.Database.ExecuteAsync("DELETE FROM EjercicioRealizado");
+
+                    await DisplayAlert("Éxito", "La base de datos fue vaciada correctamente.", "OK");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
+                }
+            }
+        }
+
     }
 
 }
