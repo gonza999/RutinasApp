@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Rutinas
+namespace AppRutinas
 {
     [Application]
     public class MainApplication : MauiApplication

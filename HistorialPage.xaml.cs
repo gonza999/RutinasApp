@@ -2,7 +2,7 @@ using Plugin.Maui.Calendar.Controls;
 using Plugin.Maui.Calendar.Enums;
 using Plugin.Maui.Calendar.Models;
 
-namespace Rutinas;
+namespace AppRutinas;
 
 public partial class HistorialPage : ContentPage
 {
@@ -72,11 +72,11 @@ public class EventModel
 
     public int RutinaId { get; set; }
 
-    public List<EjercicioRealizado> Ejercicios { get; set; }
+    public List<EjerciciosRealizados> Ejercicios { get; set; }
 
     public void GetEjercicios()
     {
-        Ejercicios = new List<EjercicioRealizado>();
+        Ejercicios = new List<EjerciciosRealizados>();
         var ejercicios = App.Database.ObtenerEjerciciosPorRutinaAsync(RutinaId).Result;
         foreach (var e in ejercicios)
         {

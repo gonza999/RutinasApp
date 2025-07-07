@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Rutinas
+namespace AppRutinas
 {
     public class Program
     {

@@ -1,4 +1,4 @@
-namespace Rutinas;
+namespace AppRutinas;
 
 public class Serie
 {
@@ -79,7 +79,7 @@ public partial class EntrenarPage : ContentPage
         var fecha = DateTime.Today;
 
         // Crear y guardar Rutina
-        var rutina = new Rutina
+        var rutina = new Rutinas
         {
             Fecha = fecha,
             TipoRutina = tipoRutina
@@ -96,7 +96,7 @@ public partial class EntrenarPage : ContentPage
             {
                 foreach (var serie in ejercicio.Series)
                 {
-                    var ejercicioRealizado = new EjercicioRealizado
+                    var ejercicioRealizado = new EjerciciosRealizados
                     {
                         RutinaId = rutina.Id, // importante: se completa tras insertar Rutina
                         NombreEjercicio = ejercicio.Nombre,

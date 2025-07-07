@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Rutinas
+namespace AppRutinas
 {
     internal class Program : MauiApplication
     {

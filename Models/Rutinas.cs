@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-public class Rutina
+public class Rutinas
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 
-namespace Rutinas
+namespace AppRutinas
 {
     public static class MauiProgram
     {

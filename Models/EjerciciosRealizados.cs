@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-public class EjercicioRealizado
+public class EjerciciosRealizados
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }

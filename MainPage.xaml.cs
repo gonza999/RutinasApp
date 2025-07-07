@@ -1,4 +1,4 @@
-﻿namespace Rutinas
+﻿namespace AppRutinas
 {
     public partial class MainPage : ContentPage
     {
