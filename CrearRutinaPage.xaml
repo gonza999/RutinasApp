@@ -1,0 +1,42 @@
+<!-- CrearRutinaPage.xaml -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppRutinas.CrearRutinaPage"
+             Title="Crear Rutina"
+             BackgroundColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label Text="Nombre de la Rutina" FontSize="20"
+                   TextColor="Black"/>
+            <Entry x:Name="NombreRutinaEntry" Placeholder="Ej: Full Body"
+                   TextColor="Gray"
+                   BackgroundColor="LightBlue"/>
+
+            <Label Text="Seleccioná los ejercicios" FontSize="20"
+                   TextColor="Black"
+                   FontAttributes="Bold"/>
+
+            <!-- justo arriba del CollectionView -->
+            <Button Text="➕ Nuevo Ejercicio"
+                    FontSize="18"
+                    Clicked="OnAgregarEjercicioClicked"/>
+
+            <CollectionView x:Name="EjerciciosCollection"
+                            SelectionMode="Multiple"
+                            ItemsSource="{Binding Ejercicios}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10" BackgroundColor="LightGray" Margin="5">
+                            <Label Text="{Binding Nombre}" FontSize="18"
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Text="Guardar Rutina" Clicked="OnGuardarRutinaClicked" FontSize="22"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -31,29 +31,29 @@ public partial class HistorialPage : ContentPage
         listaDates = new List<DateTime>();
         var diasEjercidos = await App.Database.ObtenerDiasEjercidosAsync();
 
-       foreach (var d in diasEjercidos)
-       {
-           var date = d.Fecha;
-           if (listaDates.Contains(date.Date))
-           {
-               canContinue = false;
-           }
-           else
-           {
-               listaDates.Add(date.Date);
-               canContinue = true;
-           }
-           if (canContinue)
-           {
-               var eventModel = new EventModel();
-               eventModel.GetRutina(d.RutinaId);
-               eventModel.GetEjercicios();
-               EventCollection.Add(date, new List<EventModel>
+        foreach (var g in diasEjercidos.GroupBy(d => d.Fecha.Date))
+        {
+            var date = g.Key;
+            if (listaDates.Contains(date.Date))
+            {
+                canContinue = false;
+            }
+            else
+            {
+                listaDates.Add(date.Date);
+                canContinue = true;
+            }
+            if (canContinue)
+            {
+                var eventModel = new EventModel();
+                eventModel.GetRutina(g.FirstOrDefault().RutinaId);
+                eventModel.GetEjercicios(diasEjercidos);
+                EventCollection.Add(date, new List<EventModel>
                {
                   eventModel
                });
-           }
-       }
+            }
+        }
 
         BindingContext = this;
     }
@@ -70,19 +70,30 @@ public class EventModel
     public Rutinas Rutina { get; set; }
     public List<Ejercicios> Ejercicios { get; set; }
 
-    public void GetEjercicios()
+    public async void GetEjercicios(List<DiasEjercidos> diasEjercidos)
     {
         Ejercicios = new List<Ejercicios>();
-        var ejercicios = App.Database.ObtenerEjerciciosPorRutinaAsync(Rutina.RutinaId).Result;
+        var ejercicios = await App.Database.ObtenerEjerciciosPorRutinaAsync(Rutina.RutinaId);
         foreach (var e in ejercicios)
         {
+            foreach (var s in e.Series)
+            {
+                s.Peso = diasEjercidos
+                    .Where(d => d.EjercicioId == e.EjercicioId && d.Serie == s.Numero)
+                    .Select(d => d.Peso)
+                    .FirstOrDefault();
+                s.Repeticiones = diasEjercidos
+                    .Where(d => d.EjercicioId == e.EjercicioId && d.Serie == s.Numero)
+                    .Select(d => d.Repeticiones)
+                    .FirstOrDefault();
+            }
             Ejercicios.Add(e);
         }
     }
 
     public void GetRutina(int rutinaId)
     {
-        Rutina= App.Database.ObtenerRutinaPorIdAsync(rutinaId).Result;
+        Rutina = App.Database.ObtenerRutinaPorIdAsync(rutinaId).Result;
     }
 }
 

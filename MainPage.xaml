@@ -21,6 +21,12 @@
                         Text="🏋️ Entrenar"
                         FontSize="30"
                         Clicked="OnEntrenarClicked"/>
+
+                <!-- Nuevo botón para crear rutina -->
+                <Button x:Name="CrearRutinaButton"
+                        Text="📝 Crear Rutina"
+                        FontSize="30"
+                        Clicked="OnCrearRutinaClicked"/>
             </VerticalStackLayout>
         </ScrollView>
 

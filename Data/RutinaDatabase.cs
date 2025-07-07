@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
+using Microsoft.Win32;
 using SQLite;
 
 public class RutinaDatabase
@@ -61,5 +62,39 @@ public class RutinaDatabase
         return _database.Table<Rutinas>()
                            .Where(r => r.RutinaId == rutinaId)
                            .FirstOrDefaultAsync();
+    }
+
+    public Task<Ejercicios> ObtenerEjercicioPorIdAsync(int ejercicioId)
+    {
+        return _database.Table<Ejercicios>()
+                           .Where(e => e.EjercicioId == ejercicioId)
+                           .FirstOrDefaultAsync();
+    }
+
+    public Task<List<Ejercicios>> ObtenerEjerciciosAsync()
+    {
+        return _database.Table<Ejercicios>().ToListAsync();
+    }
+
+    public Task<int> GuardarRutina(Rutinas rutina)
+    {
+        return _database.InsertAsync(rutina);
+    }
+
+    public Task<int> GuardarEjercicioRutina(EjerciciosRutinas ejerciciosRutinas)
+    {
+        return _database.InsertAsync(ejerciciosRutinas);
+    }
+
+    public Task<int> GuardarEjercicio(Ejercicios nuevoEjercicio)
+    {
+        return _database.InsertAsync(nuevoEjercicio);
+    }
+
+    public Task<Ejercicios> ObtenerEjercicioPorNombreAsync(string nuevoNombre)
+    {
+        return _database.Table<Ejercicios>()
+                   .Where(e => e.Nombre.ToLower() == nuevoNombre.ToLower())
+                   .FirstOrDefaultAsync();
     }
 }

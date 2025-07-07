@@ -80,6 +80,12 @@
             }
         }
 
+        private async void OnCrearRutinaClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CrearRutinaPage());
+        }
+
+
     }
 
 }

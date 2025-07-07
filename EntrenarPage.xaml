@@ -41,12 +41,12 @@
                                        VerticalOptions="Center"
                                        TextColor="Black" />
 
-                                <Image Source="{Binding Imagen}"
+                                <!--<Image Source="{Binding Imagen}"
                                        Aspect="AspectFit"
                                        HeightRequest="300"
                                        WidthRequest="300"
                                        VerticalOptions="Center"
-                                       Margin="0,0,0,0"/>
+                                       Margin="0,0,0,0"/>-->
                             
 
                             <!-- Tabla de series -->
@@ -63,7 +63,7 @@
                                                    Grid.Column="0" />
 
                                             <!-- Número de serie -->
-                                            <Label Text="{Binding Numero}"
+                                            <Label Text="{Binding Numero, StringFormat='{}{0} °'}"
                                                    Grid.Column="1"
                                                    HorizontalOptions="Center"
                                                    VerticalOptions="Center"
@@ -78,6 +78,10 @@
                                                    WidthRequest="80"
                                                    BackgroundColor="#f5f5f5"
                                                    TextColor="Black"/>
+                                            <Label Text="Reps"
+                                                   TextColor="Black"
+                                                   Grid.Column="2"
+                                                   HorizontalTextAlignment="End"/>
 
                                             <!-- Entry para peso -->
                                             <Entry Placeholder="Peso"
@@ -88,8 +92,11 @@
                                                    WidthRequest="80"
                                                    BackgroundColor="#f5f5f5"
                                                    TextColor="Black"/>
-
-                                        </Grid>
+                                                <Label Text="Kg"
+                                                       TextColor="Black"
+                                                       Grid.Column="3"
+                                                       HorizontalTextAlignment="End"/>
+                                            </Grid>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
