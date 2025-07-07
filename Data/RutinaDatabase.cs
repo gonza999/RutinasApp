@@ -8,7 +8,9 @@ public class RutinaDatabase
     {
         _database = new SQLiteAsyncConnection(dbPath);
         _database.CreateTableAsync<Rutinas>().Wait();
-        _database.CreateTableAsync<EjerciciosRealizados>().Wait();
+        _database.CreateTableAsync<EjerciciosRutinas>().Wait();
+        _database.CreateTableAsync<Ejercicios>().Wait();
+        _database.CreateTableAsync<DiasEjercidos>().Wait();
     }
 
     public Task<int> GuardarRutinaAsync(Rutinas rutina)
@@ -16,35 +18,25 @@ public class RutinaDatabase
         return _database.InsertAsync(rutina);
     }
 
-    public Task<int> GuardarEjercicioAsync(EjerciciosRealizados ejercicio)
-    {
-        return _database.InsertAsync(ejercicio);
-    }
-
     public Task<List<Rutinas>> ObtenerRutinasAsync()
     {
         return _database.Table<Rutinas>().ToListAsync();
     }
 
-    public Task<List<Rutinas>> ObtenerRutinasPorFechaAsync()
-    {
-        DateTime hoy = DateTime.Now.Date;
-        DateTime mañana = hoy.AddDays(1);
-
-        return _database.Table<Rutinas>()
-            .Where(r => r.Fecha >= hoy && r.Fecha < mañana)
-            .ToListAsync();
-    }
-
-    public Task<List<EjerciciosRealizados>> ObtenerEjerciciosPorRutinaAsync(int rutinaId)
-    {
-        return _database.Table<EjerciciosRealizados>()
-                        .Where(e => e.RutinaId == rutinaId)
-                        .ToListAsync();
-    }
-
     public async Task ExecuteAsync(string query)
     {
         await _database.ExecuteAsync(query);
+    }
+
+    public async Task<List<Ejercicios>> ObtenerEjerciciosPorRutinaAsync(int rutinaId)
+    {
+        var query = @"
+        SELECT e.EjercicioId, e.Nombre, e.Imagen
+        FROM Ejercicios e
+        INNER JOIN EjerciciosRutinas er ON e.EjercicioId = er.EjercicioId
+        WHERE er.RutinaId = ?
+    ";
+
+        return await _database.QueryAsync<Ejercicios>(query, rutinaId);
     }
 }

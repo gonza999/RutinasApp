@@ -1,13 +1,15 @@
 ﻿using SQLite;
 
-public class EjerciciosRealizados
+public class DiasEjercidos
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
+    public DateTime Fecha { get; set; }
+
     public int RutinaId { get; set; }
 
-    public string NombreEjercicio { get; set; }
+    public int EjercicioId { get; set; }
 
     public int Serie { get; set; }
 

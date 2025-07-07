@@ -3,9 +3,7 @@
 public class Rutinas
 {
     [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
+    public int RutinaId { get; set; }
 
-    public DateTime Fecha { get; set; }
-
-    public string TipoRutina { get; set; }
+    public string Nombre { get; set; }
 }

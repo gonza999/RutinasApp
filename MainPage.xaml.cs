@@ -22,16 +22,16 @@
 
         public async void ValidarButtonEntrenar()
         {
-            var rutinas = await App.Database.ObtenerRutinasPorFechaAsync();
-            if (rutinas.Count>0)
-            {
-                canTraining = false;
-            }
-            else
-            {
-                canTraining = true;
-            }
-            EntrenarButton.IsEnabled = canTraining;
+            //var rutinas = await App.Database.ObtenerRutinasPorFechaAsync();
+            //if (rutinas.Count>0)
+            //{
+            //    canTraining = false;
+            //}
+            //else
+            //{
+            //    canTraining = true;
+            //}
+            //EntrenarButton.IsEnabled = canTraining;
         }
         public async void ValidarButtonHistorial()
         {

@@ -31,30 +31,30 @@ public partial class HistorialPage : ContentPage
         listaDates = new List<DateTime>();
         var rutinas = await App.Database.ObtenerRutinasAsync();
 
-        foreach (var r in rutinas)
-        {
-            var date = r.Fecha;
-            if (listaDates.Contains(date.Date))
-            {
-                canContinue = false;
-            }
-            else
-            {
-                listaDates.Add(date.Date);
-                canContinue = true;
-            }
-            if (canContinue)
-            {
-                var eventModel = new EventModel();
-                eventModel.TipoRutina = r.TipoRutina;
-                eventModel.RutinaId = r.Id;
-                eventModel.GetEjercicios();
-                EventCollection.Add(date, new List<EventModel>
-                {
-                   eventModel
-                });
-            }
-        }
+        //foreach (var r in rutinas)
+        //{
+        //    //var date = r.Fecha;
+        //    if (listaDates.Contains(date.Date))
+        //    {
+        //        canContinue = false;
+        //    }
+        //    else
+        //    {
+        //        listaDates.Add(date.Date);
+        //        canContinue = true;
+        //    }
+        //    if (canContinue)
+        //    {
+        //        var eventModel = new EventModel();
+        //        eventModel.TipoRutina = r.Nombre;
+        //        //eventModel.RutinaId = r.Id;
+        //        //eventModel.GetEjercicios();
+        //        EventCollection.Add(date, new List<EventModel>
+        //        {
+        //           eventModel
+        //        });
+        //    }
+        //}
 
         BindingContext = this;
     }
@@ -72,16 +72,16 @@ public class EventModel
 
     public int RutinaId { get; set; }
 
-    public List<EjerciciosRealizados> Ejercicios { get; set; }
+    //public List<EjerciciosRealizados> Ejercicios { get; set; }
 
-    public void GetEjercicios()
-    {
-        Ejercicios = new List<EjerciciosRealizados>();
-        var ejercicios = App.Database.ObtenerEjerciciosPorRutinaAsync(RutinaId).Result;
-        foreach (var e in ejercicios)
-        {
-            Ejercicios.Add(e);
-        }
-    }
+    //public void GetEjercicios()
+    //{
+    //    Ejercicios = new List<EjerciciosRealizados>();
+    //    var ejercicios = App.Database.ObtenerEjerciciosPorRutinaAsync(RutinaId).Result;
+    //    foreach (var e in ejercicios)
+    //    {
+    //        Ejercicios.Add(e);
+    //    }
+    //}
 }
 

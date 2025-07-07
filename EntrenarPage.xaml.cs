@@ -1,26 +1,5 @@
 namespace AppRutinas;
 
-public class Serie
-{
-    public int Numero { get; set; }
-    public int? Repeticiones { get; set; }
-    public double? Peso { get; set; }
-}
-
-public class Ejercicio
-{
-    public string Nombre { get; set; }
-    public List<Serie> Series { get; set; }
-}
-
-public class RutinaDia
-{
-    public DateTime Fecha { get; set; }
-    public string TipoRutina { get; set; }
-    public List<Ejercicio> Ejercicios { get; set; }
-}
-
-
 public partial class EntrenarPage : ContentPage
 {
     public EntrenarPage()
@@ -29,9 +8,16 @@ public partial class EntrenarPage : ContentPage
         FechaLabel.Text = CapitalizarPrimeraLetra(DateTime.Now.ToString("dddd dd/MM/yyyy"));
         FechaLabel.TextColor = Colors.Black;
 
-        RutinaPicker.ItemsSource = DatosRutinas.Rutinas;
-        RutinaPicker.SelectedIndex = -1; // para que no quede seleccionado nada por defecto
+        CargarPicker();
+        RutinaPicker.SelectedIndex = 0; // para que no quede seleccionado nada por defecto
 
+    }
+
+    private async void CargarPicker()
+    {
+        var lista = await App.Database.ObtenerRutinasAsync();
+        lista.Insert(0, new Rutinas { Nombre = "Seleccionar rutina" });
+        RutinaPicker.ItemsSource = lista;
     }
 
     private string CapitalizarPrimeraLetra(string texto)
@@ -40,26 +26,21 @@ public partial class EntrenarPage : ContentPage
         return char.ToUpper(texto[0]) + texto.Substring(1);
     }
 
-    private void OnRutinaSeleccionada(object sender, EventArgs e)
+    private async void OnRutinaSeleccionada(object sender, EventArgs e)
     {
-        if (RutinaPicker.SelectedItem == null)
+        var rutinaSeleccionada = (Rutinas)RutinaPicker.SelectedItem;
+
+        if (rutinaSeleccionada == null || rutinaSeleccionada.Nombre == "Seleccionar rutina")
         {
             EjerciciosView.ItemsSource = null;
             return;
         }
 
-        string rutinaSeleccionada = RutinaPicker.SelectedItem.ToString();
+        var ejercicios = await App.Database.ObtenerEjerciciosPorRutinaAsync(rutinaSeleccionada.RutinaId);
 
-        if (DatosRutinas.EjerciciosPorRutina.TryGetValue(rutinaSeleccionada, out var listaEjercicios))
+        if (ejercicios != null && ejercicios.Any())
         {
-            // Construimos la lista con las series por ejercicio (4 series)
-            var listaEjerciciosCompleta = listaEjercicios.Select(ejercicio => new Ejercicio
-            {
-                Nombre = ejercicio,
-                Series = Enumerable.Range(1, 4).Select(i => new Serie { Numero = i }).ToList()
-            }).ToList();
-
-            EjerciciosView.ItemsSource = listaEjerciciosCompleta;
+            EjerciciosView.ItemsSource = ejercicios;
         }
         else
         {
@@ -75,45 +56,43 @@ public partial class EntrenarPage : ContentPage
             return;
         }
 
-        var tipoRutina = RutinaPicker.SelectedItem.ToString();
-        var fecha = DateTime.Today;
+        //var tipoRutina = RutinaPicker.SelectedItem.ToString();
+        //var fecha = DateTime.Today;
 
-        // Crear y guardar Rutina
-        var rutina = new Rutinas
-        {
-            Fecha = fecha,
-            TipoRutina = tipoRutina
-        };
+        //// Crear y guardar Rutina
+        //var rutina = new Rutinas
+        //{
+        //    Fecha = fecha,
+        //    Nombre = tipoRutina
+        //};
 
-        await App.Database.GuardarRutinaAsync(rutina);
+        //await App.Database.GuardarRutinaAsync(rutina);
 
-        // Obtener ejercicios desde el CollectionView
-        var ejercicios = EjerciciosView.ItemsSource?.Cast<Ejercicio>().ToList();
+        //// Obtener ejercicios desde el CollectionView
+        //var ejercicios = EjerciciosView.ItemsSource?.Cast<Ejercicio>().ToList();
 
-        if (ejercicios != null)
-        {
-            foreach (var ejercicio in ejercicios)
-            {
-                foreach (var serie in ejercicio.Series)
-                {
-                    var ejercicioRealizado = new EjerciciosRealizados
-                    {
-                        RutinaId = rutina.Id, // importante: se completa tras insertar Rutina
-                        NombreEjercicio = ejercicio.Nombre,
-                        Serie = serie.Numero,
-                        Repeticiones = serie.Repeticiones,
-                        Peso = serie.Peso
-                    };
+        //if (ejercicios != null)
+        //{
+        //    foreach (var ejercicio in ejercicios)
+        //    {
+        //        foreach (var serie in ejercicio.Series)
+        //        {
+        //            var ejercicioRealizado = new EjerciciosRutinas
+        //            {
+        //                RutinaId = rutina.Id, // importante: se completa tras insertar Rutina
+        //                EjercicioId = ejercicio.Nombre,
+        //                Serie = serie.Numero,
+        //                Repeticiones = serie.Repeticiones,
+        //                Peso = serie.Peso
+        //            };
 
-                    await App.Database.GuardarEjercicioAsync(ejercicioRealizado);
-                }
-            }
-        }
+        //            await App.Database.GuardarEjercicioAsync(ejercicioRealizado);
+        //        }
+        //    }
+        //}
 
         await DisplayAlert("Guardado", "Rutina del día guardada correctamente.", "OK");
 
-
-        var rutinas = await App.Database.ObtenerRutinasAsync();
 
         // Volver a la pantalla anterior
         await Navigation.PopAsync();
