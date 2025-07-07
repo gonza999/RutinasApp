@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Microsoft.Maui.Controls;
+using SQLite;
 
 public class RutinaDatabase
 {
@@ -11,11 +12,6 @@ public class RutinaDatabase
         _database.CreateTableAsync<EjerciciosRutinas>().Wait();
         _database.CreateTableAsync<Ejercicios>().Wait();
         _database.CreateTableAsync<DiasEjercidos>().Wait();
-    }
-
-    public Task<int> GuardarRutinaAsync(Rutinas rutina)
-    {
-        return _database.InsertAsync(rutina);
     }
 
     public Task<List<Rutinas>> ObtenerRutinasAsync()
@@ -38,5 +34,32 @@ public class RutinaDatabase
     ";
 
         return await _database.QueryAsync<Ejercicios>(query, rutinaId);
+    }
+
+    public Task<int> GuardarDiaEjercido(DiasEjercidos registro)
+    {
+        return _database.InsertAsync(registro);
+    }
+
+    public Task<List<DiasEjercidos>> ObtenerDiasEjercidosPorFechaAsync()
+    {
+        DateTime hoy = DateTime.Now.Date;
+        DateTime mañana = hoy.AddDays(1);
+
+        return _database.Table<DiasEjercidos>()
+            .Where(d => d.Fecha >= hoy && d.Fecha < mañana)
+            .ToListAsync();
+    }
+
+    public Task<List<DiasEjercidos>> ObtenerDiasEjercidosAsync()
+    {
+        return _database.Table<DiasEjercidos>().ToListAsync();
+    }
+
+    public Task<Rutinas> ObtenerRutinaPorIdAsync(int rutinaId)
+    {
+        return _database.Table<Rutinas>()
+                           .Where(r => r.RutinaId == rutinaId)
+                           .FirstOrDefaultAsync();
     }
 }

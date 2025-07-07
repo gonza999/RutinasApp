@@ -29,32 +29,31 @@ public partial class HistorialPage : ContentPage
         bool canContinue = true;
         EventCollection = new EventCollection();
         listaDates = new List<DateTime>();
-        var rutinas = await App.Database.ObtenerRutinasAsync();
+        var diasEjercidos = await App.Database.ObtenerDiasEjercidosAsync();
 
-        //foreach (var r in rutinas)
-        //{
-        //    //var date = r.Fecha;
-        //    if (listaDates.Contains(date.Date))
-        //    {
-        //        canContinue = false;
-        //    }
-        //    else
-        //    {
-        //        listaDates.Add(date.Date);
-        //        canContinue = true;
-        //    }
-        //    if (canContinue)
-        //    {
-        //        var eventModel = new EventModel();
-        //        eventModel.TipoRutina = r.Nombre;
-        //        //eventModel.RutinaId = r.Id;
-        //        //eventModel.GetEjercicios();
-        //        EventCollection.Add(date, new List<EventModel>
-        //        {
-        //           eventModel
-        //        });
-        //    }
-        //}
+       foreach (var d in diasEjercidos)
+       {
+           var date = d.Fecha;
+           if (listaDates.Contains(date.Date))
+           {
+               canContinue = false;
+           }
+           else
+           {
+               listaDates.Add(date.Date);
+               canContinue = true;
+           }
+           if (canContinue)
+           {
+               var eventModel = new EventModel();
+               eventModel.GetRutina(d.RutinaId);
+               eventModel.GetEjercicios();
+               EventCollection.Add(date, new List<EventModel>
+               {
+                  eventModel
+               });
+           }
+       }
 
         BindingContext = this;
     }
@@ -68,20 +67,22 @@ public partial class HistorialPage : ContentPage
 
 public class EventModel
 {
-    public string TipoRutina { get; set; }
+    public Rutinas Rutina { get; set; }
+    public List<Ejercicios> Ejercicios { get; set; }
 
-    public int RutinaId { get; set; }
+    public void GetEjercicios()
+    {
+        Ejercicios = new List<Ejercicios>();
+        var ejercicios = App.Database.ObtenerEjerciciosPorRutinaAsync(Rutina.RutinaId).Result;
+        foreach (var e in ejercicios)
+        {
+            Ejercicios.Add(e);
+        }
+    }
 
-    //public List<EjerciciosRealizados> Ejercicios { get; set; }
-
-    //public void GetEjercicios()
-    //{
-    //    Ejercicios = new List<EjerciciosRealizados>();
-    //    var ejercicios = App.Database.ObtenerEjerciciosPorRutinaAsync(RutinaId).Result;
-    //    foreach (var e in ejercicios)
-    //    {
-    //        Ejercicios.Add(e);
-    //    }
-    //}
+    public void GetRutina(int rutinaId)
+    {
+        Rutina= App.Database.ObtenerRutinaPorIdAsync(rutinaId).Result;
+    }
 }
 

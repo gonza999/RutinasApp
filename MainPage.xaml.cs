@@ -22,21 +22,21 @@
 
         public async void ValidarButtonEntrenar()
         {
-            //var rutinas = await App.Database.ObtenerRutinasPorFechaAsync();
-            //if (rutinas.Count>0)
-            //{
-            //    canTraining = false;
-            //}
-            //else
-            //{
-            //    canTraining = true;
-            //}
-            //EntrenarButton.IsEnabled = canTraining;
+            var diasEjercidos = await App.Database.ObtenerDiasEjercidosPorFechaAsync();
+            if (diasEjercidos.Count>0)
+            {
+                canTraining = false;
+            }
+            else
+            {
+                canTraining = true;
+            }
+            EntrenarButton.IsEnabled = canTraining;
         }
         public async void ValidarButtonHistorial()
         {
-            var rutinas = await App.Database.ObtenerRutinasAsync();
-            if (rutinas.Count > 0)
+            var diasEjercidos = await App.Database.ObtenerDiasEjercidosAsync();
+            if (diasEjercidos.Count > 0)
             {
                 canHistorial = true;
             }
@@ -69,9 +69,7 @@
                 try
                 {
                     // Ejecutar los DELETE
-                    await App.Database.ExecuteAsync("DELETE FROM Rutina");
-                    await App.Database.ExecuteAsync("DELETE FROM sqlite_sequence");
-                    await App.Database.ExecuteAsync("DELETE FROM EjercicioRealizado");
+                    await App.Database.ExecuteAsync("DELETE FROM DiasEjercidos");
 
                     await DisplayAlert("Éxito", "La base de datos fue vaciada correctamente.", "OK");
                 }

@@ -26,7 +26,7 @@
                         <VerticalStackLayout Spacing="10">
                          
                             <!-- Título de la rutina -->
-                            <Label Text="{Binding TipoRutina}"
+                            <Label Text="{Binding Rutina.Nombre}"
                            FontAttributes="Bold"
                            FontSize="18"
                            TextColor="Black"/>
@@ -65,7 +65,7 @@
                                       ColumnSpacing="10"
                                       Padding="5,2">
 
-                                            <Label Text="{Binding NombreEjercicio}"
+                                            <Label Text="{Binding Nombre}"
                                            Grid.Column="0"
                                            TextColor="Black"/>
                                             <Label Text="{Binding Serie, StringFormat='{}{0} °'}"

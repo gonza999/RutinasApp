@@ -63,7 +63,7 @@
                                                    Grid.Column="0" />
 
                                             <!-- Número de serie -->
-                                            <Label Text="{Binding .}"
+                                            <Label Text="{Binding Numero}"
                                                    Grid.Column="1"
                                                    HorizontalOptions="Center"
                                                    VerticalOptions="Center"
@@ -71,6 +71,7 @@
 
                                             <!-- Entry para repeticiones -->
                                             <Entry Placeholder="Reps"
+                                                   Text="{Binding Repeticiones , Mode=TwoWay}"
                                                    Keyboard="Numeric"
                                                    Grid.Column="2"
                                                    HorizontalOptions="Center"
@@ -80,6 +81,7 @@
 
                                             <!-- Entry para peso -->
                                             <Entry Placeholder="Peso"
+                                                   Text="{Binding Peso , Mode=TwoWay}"
                                                    Keyboard="Numeric"
                                                    Grid.Column="3"
                                                    HorizontalOptions="Center"

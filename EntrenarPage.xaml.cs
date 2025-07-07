@@ -16,7 +16,7 @@ public partial class EntrenarPage : ContentPage
     private async void CargarPicker()
     {
         var lista = await App.Database.ObtenerRutinasAsync();
-        lista.Insert(0, new Rutinas { Nombre = "Seleccionar rutina" });
+        lista.Insert(0, new Rutinas { Nombre = "---Seleccionar rutina---" });
         RutinaPicker.ItemsSource = lista;
     }
 
@@ -50,46 +50,33 @@ public partial class EntrenarPage : ContentPage
 
     private async void OnGuardarDiaClicked(object sender, EventArgs e)
     {
-        if (RutinaPicker.SelectedItem == null)
+        var rutinaSeleccionada = (Rutinas)RutinaPicker.SelectedItem;
+        var ejercicios = (List<Ejercicios>)EjerciciosView.ItemsSource;
+
+
+        if (RutinaPicker.SelectedItem == null || RutinaPicker.SelectedIndex==0)
         {
             await DisplayAlert("Error", "Seleccioná una rutina antes de guardar.", "OK");
             return;
         }
 
-        //var tipoRutina = RutinaPicker.SelectedItem.ToString();
-        //var fecha = DateTime.Today;
+        foreach (var ejercicio in ejercicios)
+        {
+            foreach (var serie in ejercicio.Series)
+            {
+                var registro = new DiasEjercidos
+                {
+                    Fecha = DateTime.Today,
+                    RutinaId = rutinaSeleccionada.RutinaId,
+                    EjercicioId = ejercicio.EjercicioId,
+                    Serie = serie.Numero,
+                    Repeticiones = serie.Repeticiones,
+                    Peso = serie.Peso
+                };
 
-        //// Crear y guardar Rutina
-        //var rutina = new Rutinas
-        //{
-        //    Fecha = fecha,
-        //    Nombre = tipoRutina
-        //};
-
-        //await App.Database.GuardarRutinaAsync(rutina);
-
-        //// Obtener ejercicios desde el CollectionView
-        //var ejercicios = EjerciciosView.ItemsSource?.Cast<Ejercicio>().ToList();
-
-        //if (ejercicios != null)
-        //{
-        //    foreach (var ejercicio in ejercicios)
-        //    {
-        //        foreach (var serie in ejercicio.Series)
-        //        {
-        //            var ejercicioRealizado = new EjerciciosRutinas
-        //            {
-        //                RutinaId = rutina.Id, // importante: se completa tras insertar Rutina
-        //                EjercicioId = ejercicio.Nombre,
-        //                Serie = serie.Numero,
-        //                Repeticiones = serie.Repeticiones,
-        //                Peso = serie.Peso
-        //            };
-
-        //            await App.Database.GuardarEjercicioAsync(ejercicioRealizado);
-        //        }
-        //    }
-        //}
+                await App.Database.GuardarDiaEjercido(registro);
+            }
+        }
 
         await DisplayAlert("Guardado", "Rutina del día guardada correctamente.", "OK");
 
